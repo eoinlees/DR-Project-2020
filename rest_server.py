@@ -16,7 +16,7 @@ nextId=5
 
 @app.route('/')
 def index():
-   return  "Hello, World Project folder"
+   return  "Hello, Megh. I made a website. Its online. Its just this line, but i think its cool."
 
 # Get all boards
 @app.route('/surfboards')
