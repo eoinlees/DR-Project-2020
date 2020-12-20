@@ -1,15 +1,15 @@
 import mysql.connector
-
+import dbConfig as cfg
 #nextId=5
 
 class SurfboardDao:
     db = ""
     def __init__(self):
         self.db = mysql.connector.connect(
-          host = "localhost",
-          username = 'root',
-          password = 'Lahinch1991',
-          database = 'datarepresentation'
+          host = cfg.mysql["host"],
+          username = cfg.mysql["username"],
+          password = cfg.mysql["password"],
+          database = cfg.mysql["database"]
         )
         #print("Connection made")
 
