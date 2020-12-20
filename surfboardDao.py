@@ -18,7 +18,7 @@ class SurfboardDao:
         cursor = self.db.cursor()
         sql = "insert into surfboards (ID, make, model, type, price) values (%s, %s,%s,%s,%s)"
         values = [
-            nextId,
+            surfboard["ID"],
             surfboard["make"],
             surfboard["model"],
             surfboard["type"],
@@ -27,26 +27,6 @@ class SurfboardDao:
         cursor.execute(sql, values)
         self.db.commit()
         return cursor.lastrowid
-
-
-""" def create():
-    global nextId
-    if not request.json:
-        abort(400)
-
-    surfboard = {
-        "id": nextId, 
-        "Make": request.json["Make"], 
-        "Model": request.json["Model"], 
-        "Type": request.json["Type"], 
-        "Price": request.json["Price"]
-    }
-    surfboards.append(surfboard)
-    nextId += 1
-    return jsonify(surfboard)
-    return "served by create" """
-
-
 
     def getAll(self):
         cursor = self.db.cursor()
