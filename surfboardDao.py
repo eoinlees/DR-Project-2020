@@ -3,19 +3,45 @@ import dbConfig as cfg
 #nextId=5
 
 class SurfboardDao:
-    db = ""
-    def __init__(self):
-        self.db = mysql.connector.connect(
-          host = cfg.mysql["host"],
-          username = cfg.mysql["username"],
-          password = cfg.mysql["password"],
-          database = cfg.mysql["database"]
+
+    def initConnectToDB(self):
+        db = mysql.connector.connect(
+            host = cfg.mysql["host"],
+            username = cfg.mysql["username"],
+            password = cfg.mysql["password"],
+            database = cfg.mysql["database"],
+            pool_name='my_connection_pool',
+            pool_size=10
         )
-        #print("Connection made")
+        return db
+
+    def getConnection(self):
+        db = mysql.connector.connect(
+            pool_name='my_connection_pool'
+        )
+        return db
+
+    #def connectToDB(self):
+    #    self.db = mysql.connector.connect(
+    #      host = cfg.mysql["host"],
+    #      username = cfg.mysql["username"],
+    #      password = cfg.mysql["password"],
+    #      database = cfg.mysql["database"]
+    #    )
+
+    def __init__(self): 
+        db=self.initConnectToDB()
+        db.close()
+   
+    #def getCursor(self):
+    #    if not self.db.is_connected():
+    #        self.connectToDB()
+    #    return self.db.cursor()  
 
     def create(self, surfboard):
         #global nextId
-        cursor = self.db.cursor()
+        db = self.getConnection()
+        cursor = db.cursor()
         sql = "insert into surfboards (ID, make, model, type, price) values (%s, %s,%s,%s,%s)"
         values = [
             surfboard["ID"],
@@ -25,11 +51,16 @@ class SurfboardDao:
             surfboard["price"]
         ]
         cursor.execute(sql, values)
+
         self.db.commit()
-        return cursor.lastrowid
+        lastRowId = cursor.lastrowid
+        db.close()
+
+        return lastRowId
 
     def getAll(self):
-        cursor = self.db.cursor()
+        db = self.getConnection()
+        cursor = db.cursor()
         sql = "select * from surfboards"
         cursor.execute(sql)
         results = cursor.fetchall()
@@ -38,21 +69,24 @@ class SurfboardDao:
         for result in results:
             resultAsDict = self.convertToDict(result)
             returnArray.append(resultAsDict)
-
+        db.close()
         return returnArray
 
         
     def findById(self, ID):
-        cursor = self.db.cursor()
+        db = self.getConnection()
+        cursor = db.cursor()
         sql = "select * from surfboards where ID = %s"
         values = [ ID ]
         cursor.execute(sql, values)
         result = cursor.fetchone()
-        
-        return self.convertToDict(result)
+        surfboard = self.convertToDict(result)
+        db.close()
+        return surfboard
 
     def update(self, surfboard):
-        cursor = self.db.cursor()
+        db = self.getConnection()
+        cursor = db.cursor()
         sql = "UPDATE surfboards set make = %s, model = %s, type = %s, price = %s WHERE ID = %s"
         values = [
             surfboard["make"],
@@ -63,15 +97,18 @@ class SurfboardDao:
         ]
         cursor.execute(sql, values)
         self.db.commit()
+        db.close()
         return surfboard
         
     
     def delete(self, ID):
-        cursor = self.db.cursor()
+        db = self.getConnection()
+        cursor = db.cursor()
         sql = "delete from surfboards where ID = %s"
         values = [ID]
         cursor.execute(sql, values)  
-        self.db.commit()    
+        self.db.commit()
+        db.close()    
         return {}
 
     def convertToDict(self, result):

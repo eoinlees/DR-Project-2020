@@ -11,6 +11,8 @@ app = Flask(__name__, static_url_path='', static_folder='staticpages')
 def index():
    return  "Hello, Megh. I made a website. Its online. Its just this line, but i think its cool."
 
+
+# curl http://127.0.0.1:5000/surfboards
 # Get all boards
 @app.route('/surfboards')
 def getAll():
