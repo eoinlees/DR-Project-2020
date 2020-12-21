@@ -15,11 +15,11 @@
                     <td><input type="text" name="ID" id="idInput"></td>
                 </tr>
                 <tr>
-                    <td>title</td>
+                    <td>make</td>
                     <td><input type="text" name="make"></td>
                 </tr>
                 <tr>
-                    <td>author</td>
+                    <td>model</td>
                     <td><input type="text" name="model"></td>
                 </tr>
                 <tr>    
@@ -40,11 +40,11 @@
             </table>
         </div>
         <div id="display">
-            <h2>Books</h2>
+            <h2>Surfboards</h2>
             <button onClick="showCreate()">Create</button>
-            <table id="bookTable" class="table">
+            <table id="surfboardTable" class="table">
                 <tr>
-                    <th>ISBN</th><th>title</th><th>author</th><th>price</th><th></th><th></th>
+                    <th>ID</th><th>make</th><th>model</th><th>type</th><th>price</th><th></th><th></th>
                 </tr>
                 
             </table>
@@ -61,8 +61,8 @@
             }
             function showUpdate(thisElem){
                 var rowElement = thisElem.parentNode.parentNode;
-                book = readBookFromRow(rowElement)
-                populateForm(book)
+                surfboard = readSurfboardFromRow(rowElement)
+                populateForm(surfboard)
 
                 document.getElementById('display').style.display = "none"
                 document.getElementById('update-button').style.display = "block"
@@ -70,52 +70,55 @@
                 document.getElementById('create-update').style.display = "block"
 
             }
-            function readBookFromRow(rowElement){
-                book = {}
-                book.ISBN = rowElement.getAttribute("id");
-                book.title = rowElement.cells[1].firstChild.textContent
-                book.author = rowElement.cells[2].firstChild.textContent
-                book.price = rowElement.cells[3].firstChild.textContent
+            function readSurfboardFromRow(rowElement){
+                surfboard = {}
+                surfboard.ID = rowElement.getAttribute("id");
+                surfboard.make = rowElement.cells[1].firstChild.textContent
+                surfboard.model = rowElement.cells[2].firstChild.textContent
+                surfboard.typel = rowElement.cells[3].firstChild.textContent
+                surfboard.price = rowElement.cells[4].firstChild.textContent
 
-                return book
+                return surfboard
                 
             }
-            function populateForm(book){
+            function populateForm(surfboard){
                 var form = document.getElementById('createUpdateForm')
 
                 
-                form.querySelector('input[name="ISBN"]').value = book.ISBN
-                form.querySelector('input[name="ISBN"]').disabled=true
+                form.querySelector('input[name="ID"]').value = surfboard.ID
+                form.querySelector('input[name="ID"]').disabled=true
                 
-                form.querySelector('input[name="title"]').value = book.title
-                form.querySelector('input[name="author"]').value = book.author
-                form.querySelector('input[name="price"]').value = book.price      
+                form.querySelector('input[name="make"]').value = surfboard.make
+                form.querySelector('input[name="model"]').value = surfboard.model
+                form.querySelector('input[name="type"]').value = surfboard.type
+                form.querySelector('input[name="price"]').value = surfboard.price      
             }
             function clearForm() {
                     var form = document.getElementById('createUpdateForm')
 
 
-                    form.querySelector('input[name="ISBN"]').value = ''
-                    form.querySelector('input[name="ISBN"]').disabled = false
+                    form.querySelector('input[name="ID"]').value = ''
+                    form.querySelector('input[name="ID"]').disabled = false
 
-                    form.querySelector('input[name="title"]').value = ''
-                    form.querySelector('input[name="author"]').value = ''
+                    form.querySelector('input[name="make"]').value = ''
+                    form.querySelector('input[name="model"]').value = ''
+                    form.querySelector('input[name="type"]').value = ''
                     form.querySelector('input[name="price"]').value = ''
                 }
 
             function doCreate(){
                 console.log("in doCreate")
-                book= getBookFromForm()
-                console.log(book)
+                surfboard = getSurfboardFromForm()
+                console.log(surfboard)
                 $.ajax({
-                    url:"/books",
-                    data:JSON.stringify(book),
+                    url:"/surfboards",
+                    data:JSON.stringify(surfboard),
                     method:"POST",
                     dataType:"JSON",
                     contentType: "application/json; charset=utf-8",
                     success:function(result){
                         console.log(result) 
-                        addBookToTable(book)
+                        addSurfboardToTable(surfboard)
                         showDisplay()
                         clearForm()
 
@@ -124,23 +127,23 @@
                         console.log("error"+error)
                     }
                 })
-               
+
             }
             function doUpdate(){
-                book = getBookFromForm()
-                updateServer(book)
+                surfboard = getSurfboardFromForm()
+                updateServer(surfboard)
                 
             }
-            function updateServer(book){
-               $.ajax({
-                    url: "/books/"+book.ISBN,
-                    data: JSON.stringify(book),
+            function updateServer(surfboard){
+                $.ajax({
+                    url: "/surfboards/"+surfboard.ID,
+                    data: JSON.stringify(surfboard),
                     method: "PUT",
                     dataType: "JSON",
                     contentType: "application/json; charset=utf-8",
                     success: function (result) {
                         console.log(result)
-                        updateTableRow(book)
+                        updateTableRow(surfboard)
                         showDisplay()
                         clearForm()
 
@@ -151,12 +154,12 @@
                 })
             }
             function doDelete(thisElem){
-                var tableElement = document.getElementById('bookTable');
+                var tableElement = document.getElementById('surfboardTable');
                 var rowElement = thisElem.parentNode.parentNode;
                 var index = rowElement.rowIndex;
-                ISBN = rowElement.getAttribute("id");
+                ID = rowElement.getAttribute("id");
                 $.ajax({
-                    url:"/books/"+ISBN,
+                    url:"/surfboards/"+ID,
                     method:"DELETE",
                     dateType:"JSON",
                     success:function(result){
@@ -168,25 +171,27 @@
                 })
                 
             }
-            function updateTableRow(book){
-                rowElement = document.getElementById(book.ISBN)
-                rowElement.cells[1].firstChild.textContent = book.title
-                rowElement.cells[2].firstChild.textContent = book.author
-                rowElement.cells[3].firstChild.textContent = book.price
+            function updateTableRow(surfboard){
+                rowElement = document.getElementById(surfboard.ID)
+                rowElement.cells[1].firstChild.textContent =surfboard.make
+                rowElement.cells[2].firstChild.textContent = surfboard.model
+                rowElement.cells[3].firstChild.textContent = surfboard.type
+                rowElement.cells[4].firstChild.textContent = surfboard.price
                 //console.log("updating table")
             }
-            function getBookFromForm(){
+            function getSurfboardFromForm(){
                 var form = document.getElementById('createUpdateForm')
 
-                var book = {}
-                book.ISBN = form.querySelector('input[name="ISBN"]').value
-                book.title = form.querySelector('input[name="title"]').value
-                book.author = form.querySelector('input[name="author"]').value
-                book.price = form.querySelector('input[name="price"]').value
+                var surfboard = {}
+                surfboard.ID = form.querySelector('input[name="ID"]').value
+                surfboard.make = form.querySelector('input[name="make"]').value
+                surfboard.model = form.querySelector('input[name="model"]').value
+                surfboard.type = form.querySelector('input[name="typel"]').value
+                surfboard.price = form.querySelector('input[name="price"]').value
                 //console.log(book)
-                 return book
+                return surfboard
             }
-             function showDisplay() {
+            function showDisplay() {
                     document.getElementById('display').style.display = "block"
                     document.getElementById('create-update').style.display = "none"
 
@@ -194,40 +199,42 @@
 
             function populateTable(){
                 //ajax getAll
-               $.ajax({
-                   url:'http://127.0.0.1:5000/books',
-                   method:'GET',
-                   datatype:'JSON',
-                   success:function(results){
-                        for (book of results){
-                             addBookToTable(book)
+                $.ajax({
+                    url:'http://127.0.0.1:5000/surfboards',
+                    method:'GET',
+                    datatype:'JSON',
+                    success:function(results){
+                        for (surfboard of results){
+                            addSurfboardToTable(surfboard)
                         }
-                   },
-                   error:function (xhr,status,error){
-                       console.log ("error "+error +" code:"+status)
-                   }
+                    },
+                    error:function (xhr,status,error){
+                        console.log ("error "+error +" code:"+status)
+                    }
 
-               })
-               
+                })
+                
             }
-            function addBookToTable(book){
+            function addSurfboardToTable(surfboard){
                 //console.log("working so far")
-                tableElem = document.getElementById("bookTable")
+                tableElem = document.getElementById("surfboardTable")
                 rowElem = tableElem.insertRow(-1)
-                rowElem.setAttribute("id", book.ISBN)
+                rowElem.setAttribute("id", surfboard.ID)
                 cell1 = rowElem.insertCell(0)
-                cell1.innerHTML = book.ISBN
+                cell1.innerHTML = surfboard.ID
                 cell2 = rowElem.insertCell(1)
-                cell2.innerHTML = book.title
+                cell2.innerHTML = surfboard.make
                 cell3 = rowElem.insertCell(2)
-                cell3.innerHTML = book.author
+                cell3.innerHTML = surfboard.model
                 cell4 = rowElem.insertCell(3)
-                cell4.innerHTML = book.price
+                cell3.innerHTML = surfboard.type
                 cell5 = rowElem.insertCell(4)
-                cell5.innerHTML = '<button onclick="showUpdate(this)">Update</button>'
+                cell5.innerHTML = surfboard.price
                 cell6 = rowElem.insertCell(5)
-                cell6.innerHTML = '<button onclick="doDelete(this)">delete</button>'
-                 }
+                cell6.innerHTML = '<button onclick="showUpdate(this)">Update</button>'
+                cell7 = rowElem.insertCell(6)
+                cell7.innerHTML = '<button onclick="doDelete(this)">delete</button>'
+                    }
             populateTable()
         </script>
     </body>
