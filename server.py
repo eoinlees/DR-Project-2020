@@ -29,7 +29,7 @@ def findById(ID):
 #Create
 
 #Test
-# curl -X POST -H "content-type:application/json" -d "{\"ID\":1,\"make\":\"test\",\"model\":\"someboard\",\"type\":\"longboard\",\"price\":123000}" http://127.0.0.1:5000/surfboards
+# curl -X POST -H "content-type:application/json" -d "{\"ID\":4,\"make\":\"test\",\"model\":\"someboard\",\"type\":\"longboard\",\"price\":123000}" http://127.0.0.1:5000/surfboards
 
 @app.route('/surfboards', methods=['POST'])
 def create():
