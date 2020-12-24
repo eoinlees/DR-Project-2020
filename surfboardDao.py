@@ -86,7 +86,7 @@ class SurfboardDao:
     def update(self, surfboard):
         cursor = self.getCursor()
 
-        sql = "UPDATE surfboards set make = %s, model = %s, type = %s, price = %s WHERE ID = %s"
+        sql = "update surfboards set make = %s, model = %s, type = %s, price = %s WHERE ID = %s"
         values = [
             surfboard["make"],
             surfboard["model"],
