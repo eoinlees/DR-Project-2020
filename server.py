@@ -9,7 +9,7 @@ app = Flask(__name__, static_url_path='', static_folder='staticpages')
 
 @app.route('/')
 def index():
-    return  "Hello, Megh. I made a website. Its online. Its just this line, but i think its cool."
+    return  "This is my website!  Happy Christmas! "
 
 
 # curl http://127.0.0.1:5000/surfboards
