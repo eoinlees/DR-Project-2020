@@ -24,7 +24,7 @@ def getAll():
 def findById(ID):
     
     return jsonify(surfboardDao.findById(ID)) 
-    
+
 
 #Create
 

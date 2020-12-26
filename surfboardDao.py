@@ -4,23 +4,7 @@ import dbConfig as cfg
 
 class SurfboardDao:
     db=""
-    #def initConnectToDB(self):
-    #    db = mysql.connector.connect(
-    #        host = cfg.mysql["host"],
-    #        username = cfg.mysql["username"],
-    #        password = cfg.mysql["password"],
-    #        database = cfg.mysql["database"],
-    #        pool_name='my_connection_pool',
-    #        pool_size=20
-    #    )
-    #    return db
-
-    #def getConnection(self):
-    #    db = mysql.connector.connect(
-    #        pool_name='my_connection_pool'
-    #    )
-    #    return db
-
+    
     def connectToDB(self):
         self.db = mysql.connector.connect(
             host = cfg.mysql["host"],
