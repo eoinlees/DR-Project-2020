@@ -52,7 +52,7 @@
         </div>
 
         <script>
-        host = window.location.origin
+        
             function showCreate(){
                 document.getElementById('display').style.display = "none"
                 document.getElementById('update-button').style.display = "none"
@@ -108,6 +108,7 @@
                 }
 
             function doCreate(){
+                host = window.location.origin
                 console.log("in doCreate")
                 surfboard = getSurfboardFromForm()
                 console.log(surfboard)
@@ -136,6 +137,7 @@
                 
             }
             function updateServer(surfboard){
+                host = window.location.origin
                 $.ajax({
                     url: host+"/surfboards/"+surfboard.ID,
                     data: JSON.stringify(surfboard),
@@ -155,6 +157,7 @@
                 })
             }
             function doDelete(thisElem){
+                host = window.location.origin
                 var tableElement = document.getElementById('surfboardTable');
                 var rowElement = thisElem.parentNode.parentNode;
                 var index = rowElement.rowIndex;
@@ -199,6 +202,7 @@
                 }
 
             function populateTable(){
+                host = window.location.origin
                 //ajax getAll
                 $.ajax({
                     url:host+'/surfboards',
