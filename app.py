@@ -86,5 +86,5 @@ def delete(ID):
     return jsonify({"Done":True})
 
 if __name__ == "__main__":
-    print("in if")
+    
     app.run(debug=True)
